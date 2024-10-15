@@ -6,7 +6,6 @@ import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
-import com.sky.entity.Employee;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,5 +78,31 @@ public class SetmealServiceImpl implements SetmealService {
            setmealMapper.deleteById(setmealId);
            setmealDishMapper.deleteById(setmealId);
         });
+    }
+
+    @Override
+    public SetmealDTO getByIdWithDish(Long id) {
+        Setmeal setmeal = setmealMapper.getById(id);
+        SetmealDTO setmealDTO = new SetmealDTO();
+        BeanUtils.copyProperties(setmeal, setmealDTO);
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+        setmealDTO.setSetmealDishes(setmealDishes);
+        return setmealDTO;
+    }
+
+    @Transactional
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setmealMapper.update(setmeal);
+        setmealDishMapper.deleteBySetmealId(setmealDTO.getId());
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if (setmealDishes != null && setmealDishes.size() > 0){
+            setmealDishes.forEach(setmealDish -> {
+                setmealDish.setSetmealId(setmealDTO.getId());
+            });
+            setmealDishMapper.insertBatch(setmealDishes);
+        }
     }
 }
