@@ -39,4 +39,7 @@ public interface DishMapper {
     void update(Dish dish);
 
     List<Dish> list(Dish dish);
+
+    @Select("select d.* from dish d left join setmeal_dish sd on sd.dish_id = d.id where sd.setmeal_id=#{setmealId}")
+    List<Dish> getBySetmealId(Long setmealId);
 }
