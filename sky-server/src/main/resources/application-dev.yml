@@ -11,3 +11,8 @@ sky:
     access-key-id: LTAI5tHwPGXAmeGMseEBuzpa
     access-key-secret: UzlVGGvCXvAn9Ww6kOlSdpb3dglIAX
     bucket-name: web-refuer
+  redis:
+    host: 219.223.251.96
+    port: 6379
+    password: 125125
+    database: 10
