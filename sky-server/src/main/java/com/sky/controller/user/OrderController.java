@@ -69,4 +69,12 @@ public class OrderController {
         orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
         return Result.success(orderPaymentVO);
     }
+
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("客户催单")
+    public Result reminder(@PathVariable Long id){
+        orderService.reminder(id);
+        return Result.success();
+    }
+
 }
