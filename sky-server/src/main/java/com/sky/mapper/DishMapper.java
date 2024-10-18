@@ -10,6 +10,7 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -42,4 +43,6 @@ public interface DishMapper {
 
     @Select("select d.* from dish d left join setmeal_dish sd on sd.dish_id = d.id where sd.setmeal_id=#{setmealId}")
     List<Dish> getBySetmealId(Long setmealId);
+
+    Integer countByMap(Map map);
 }
